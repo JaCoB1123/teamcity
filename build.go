@@ -65,6 +65,10 @@ type Build struct {
 		}
 	} `json:"tags"`
 
+	Artifacts struct {
+		HREF string `json:"href"`
+	} `json:"artifacts"`
+
 	// Useable, filled before sending to `IncomingBuilds`
 	Tags []string `json:"-"`
 
@@ -75,6 +79,18 @@ type Build struct {
 
 	// Useable, filled before sending to `IncomingBuilds`
 	Properties map[string]string `json:"-"`
+}
+
+type ArtifactCollection struct {
+	Count int        `json:"count"`
+	Files []Artifact `json:"file"`
+}
+
+type Artifact struct {
+	Size             int    `json:"size"`
+	ModificationTime string `json:"modificationTime"`
+	Name             string `json:"name"`
+	HREF             string `json:"href"`
 }
 
 type oneProperty struct {

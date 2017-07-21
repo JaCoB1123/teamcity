@@ -244,6 +244,39 @@ func (c *Client) GetBuildLog(buildID string) (string, error) {
 	return buf.String(), err
 }
 
+func (c *Client) GetArtifacts(build *Build) (ArtifactCollection, error) {
+	var artifacts ArtifactCollection
+
+	retries := 8
+	err := withRetry(retries, func() error {
+		return c.doRequest("GET", build.Artifacts.HREF, nil, &artifacts)
+	})
+	return artifacts, err
+}
+
+func (c *Client) GetArtifact(artifact *Artifact) (io.Reader, error) {
+	authURL := fmt.Sprintf("https://%s%s", c.host, artifact.HREF)
+
+	fmt.Printf("Sending request to %s\n", authURL)
+
+	var body io.Reader
+
+	req, _ := http.NewRequest(method, authURL, body)
+	req.SetBasicAuth(c.username, c.password)
+	req.Header.Add("Accept", "application/json")
+
+	if body != nil {
+		req.Header.Add("Content-Type", "application/json")
+	}
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Body, nil
+}
+
 func (c *Client) doRequest(method string, path string, data interface{}, v interface{}) error {
 	jsonCnt, err := c.doNotJSONRequest(method, path, data)
 	if err != nil {
