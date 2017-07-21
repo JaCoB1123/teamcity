@@ -79,7 +79,7 @@ func (c *Client) GetBuildTypes() ([]*BuildType, error) {
 }
 
 func (c *Client) SearchBuild(locator string) ([]*Build, error) {
-	path := fmt.Sprintf("/httpAuth/app/rest/builds/?locator=%s&fields=count,build(*,tags(tag),triggered(*),properties(property),problemOccurrences(*,problemOccurrence(*)),testOccurrences(*,testOccurrence(*)),changes(*,change(*)))", locator)
+	path := fmt.Sprintf("/httpAuth/app/rest/builds/?locator=%s&fields=count,build(*,tags(tag),triggered(*),properties(property))", locator)
 
 	respStruct := struct {
 		Count int
