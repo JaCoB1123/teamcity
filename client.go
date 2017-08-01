@@ -30,6 +30,24 @@ func New(host, username, password string) *Client {
 	}
 }
 
+func (c *Client) GetParameters(build *BuildType) ([]*Parameter, error) {
+	path := "/httpAuth/app/rest/buildTypes/id:" + build.ID + "/parameters"
+
+	respStruct := struct {
+		Count    int
+		Href     string
+		Property []*Parameter
+	}{}
+	retries := 8
+	err := withRetry(retries, func() error {
+		return c.doRequest("GET", path, nil, &respStruct)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return respStruct.Property, nil
+}
+
 func (c *Client) QueueBuild(buildTypeID string, branchName string, properties map[string]string) (*Build, error) {
 	jsonQuery := struct {
 		BuildTypeID string `json:"buildTypeId,omitempty"`

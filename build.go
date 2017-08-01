@@ -94,6 +94,12 @@ type Artifact struct {
 	Content          *ArtifactContent `json:"content"`
 }
 
+type Parameter struct {
+	Name      string `json:"name"`
+	Value     string `json:"value"`
+	Inherited bool   `json:"inherited"`
+}
+
 type ArtifactContent struct {
 	HREF string `json:"href"`
 }
