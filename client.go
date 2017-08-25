@@ -275,8 +275,6 @@ func (c *Client) GetArtifacts(build *Build) (ArtifactCollection, error) {
 func (c *Client) GetArtifact(artifact *ArtifactContent) (io.Reader, error) {
 	authURL := c.addProtocol(artifact.HREF)
 
-	fmt.Printf("Sending request to %s\n", authURL)
-
 	var body io.Reader
 
 	req, _ := http.NewRequest("GET", authURL, body)
