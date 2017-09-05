@@ -272,10 +272,10 @@ func (c *Client) GetArtifacts(build *Build) (ArtifactCollection, error) {
 	return artifacts, err
 }
 
-func (c *Client) GetArtifact(artifact *ArtifactContent) (io.Reader, error) {
+func (c *Client) GetArtifact(artifact *ArtifactContent) (io.ReadCloser, error) {
 	authURL := c.addProtocol(artifact.HREF)
 
-	var body io.Reader
+	var body io.ReadCloser
 
 	req, _ := http.NewRequest("GET", authURL, body)
 	req.SetBasicAuth(c.username, c.password)
